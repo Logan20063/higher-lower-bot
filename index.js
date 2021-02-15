@@ -140,6 +140,15 @@ client.on('message', message => {
     
     message.channel.send(embed)
   }
+
+  if(message.content[0] === "vote") {
+    embed = new Discord.MessageEmbed()
+      .setColor(randomColor())
+      .setTitle("VOTE")
+      .setURL("https://top.gg/bot/804703001431507004/vote")
+    
+    message.channel.send(embed)
+  }
   
   //start
   if (message.content[0] === 'start') {
