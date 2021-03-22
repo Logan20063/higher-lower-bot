@@ -119,7 +119,6 @@ client.on('message', message => {
   }
   if(numbers[message.guild.id +"prefix"] == undefined) {
     numbers[message.guild.id +"prefix"] = "^"
-    console.log("1")
   }
   
   if (message.author.bot || message.content.charAt(0) != numbers[message.guild.id + "prefix"]) {
@@ -149,7 +148,9 @@ client.on('message', message => {
     
     message.channel.send(embed)
   }
-  
+  if (isNaN(numbers[message.author.id + "endless"])) {
+    numbers[message.author.id + "endless"] = 0
+  }
   //start
   if (message.content[0] === 'start') {
     if (isNaN(numbers[message.author.id + "min"])) {
@@ -162,24 +163,30 @@ client.on('message', message => {
      numbers[message.author.id + "total"] = numbers[message.guild.id + "total"]
     }
     
+    
     picked = random(numbers[message.author.id + "min"], numbers[message.author.id + "max"])
 
 	 message.channel.send(embedTwoFields(randomColor(), "Picked", "parameters", numbers[message.author.id + "min"] + "-" + numbers[message.author.id + "max"], "guesses", numbers[message.author.id + "total"]));
 
    numbers[message.author.id] = picked
    numbers[message.author.id + "guesses"] = numbers[message.author.id + "total"]
+   if(numbers[message.author.id + "endless"] == 1) {
+     numbers[message.author.id + "guesses"] = -5
+   }
+   [message.author.id + "total"]
   }
 
   //higher/lower
-  if (message.content[0] < numbers[message.author.id] && numbers[message.author.id + "guesses"] > 0) {
+  if (message.content[0] < numbers[message.author.id] && numbers[message.author.id + "guesses"] > 0 || message.content[0] < numbers[message.author.id] && numbers[message.author.id + "endless"] == 1) {
    message.channel.send(embedZeroFields(randomColor(), ':arrow_up:higher:arrow_up:'));
    numbers[message.author.id + "guesses"] -= 1
    if (numbers[message.author.id + "guesses"] == 0) {
       message.reply('game over')
+      message.channel.send('the number was ' + numbers[message.author.id])
       numbers[message.author.id + "guesses"] -= 1
     }
   }
-  if (message.content[0] > numbers[message.author.id] && numbers[message.author.id + "guesses"] > 0) {
+  if (message.content[0] > numbers[message.author.id] && numbers[message.author.id + "guesses"] > 0 || message.content[0] > numbers[message.author.id] && numbers[message.author.id + "endless"] == 1) {
     message.channel.send(embedZeroFields(randomColor(), ':arrow_down:lower:arrow_down:'))
     numbers[message.author.id + "guesses"] -= 1
     if (numbers[message.author.id + "guesses"] == 0) {
@@ -187,7 +194,7 @@ client.on('message', message => {
       numbers[message.author.id + "guesses"] -= 1
     }
   }
-  if (message.content[0] == numbers[message.author.id] && numbers[message.author.id + "guesses"] > 0) {
+  if (message.content[0] == numbers[message.author.id] && numbers[message.author.id + "guesses"] > 0 || message.content[0] == numbers[message.author.id] && numbers[message.author.id + "endless"] == 1) {
     if(isNaN(leaderboard[message.author.id])) {
       leaderboard[message.author.id] = 0
     }
@@ -195,13 +202,31 @@ client.on('message', message => {
     numbers[message.author.id + "guesses"] = 0
 
     score = (numbers[message.author.id + "max"] - numbers[message.author.id + "min"] + 1) - Math.pow(2, numbers[message.author.id + "total"])
-    console.log(score)
 
     if(score < 1){
       score = 1    
     }
-    leaderboard[message.author.id] += score
+    if(numbers[message.author.id + "endless"] == 0){
+      leaderboard[message.author.id] += score
     message.channel.send(embedOneField(randomColor(), ':white_check_mark:Congradulations you won:white_check_mark:', 'score', score)) 
+    } else {
+      message.channel.send(embedOneField(randomColor(), "You Got It", "Score", "Nothing Since You Were In Endless Mode"))
+    }
+    
+  }
+
+  //endless
+  if(message.content[0] === "endless") {
+    if(isNaN(numbers[message.author.id + "endless"])) {
+      numbers[message.author.id + "endless"] = 0
+    }
+    if(numbers[message.author.id + "endless"] == 0) {
+      numbers[message.author.id + "endless"] = 1
+      message.channel.send(embedOneField(randomColor(), "endless mode", "new setting", "endless mode on"))
+    } else if(numbers[message.author.id + "endless"] == 1) {
+      numbers[message.author.id + "endless"] = 0
+      message.channel.send(embedOneField(randomColor(), "endless mode", "new setting", "endless mode off"))
+    }
   }
 
   //prefix
@@ -248,7 +273,11 @@ client.on('message', message => {
 
   //guesses left
   if(message.content[0] === "guessesleft") {
-    message.channel.send(embedOneField(randomColor(), "Guesses Left", "Amount", numbers[message.author.id + "guesses"]))
+    if(numbers[message.author.id + "endless"] == 0){
+      message.channel.send(embedOneField(randomColor(), "Guesses Left", "Amount", numbers[message.author.id + "guesses"]))
+    } else {
+      message.channel.send(embedOneField(randomColor(), "Guesses Left", "Amount", "endless"))
+    }
   } 
 
   //score
@@ -270,8 +299,11 @@ client.on('message', message => {
     if (isNaN(numbers[message.author.id + "total"])) {
      numbers[message.author.id + "total"] = numbers[message.guild.id + "total"]
     }
-    
-    message.channel.send(embedThreeFields(randomColor(), "Settings", "Minimum", numbers[message.author.id + "min"], "Maximum", numbers[message.author.id + "max"], "Guesses", numbers[message.author.id + "total"]))
+    if(numbers[message.author.id + "endless"] == 0){
+      message.channel.send(embedThreeFields(randomColor(), "Settings", "Minimum", numbers[message.author.id + "min"], "Maximum", numbers[message.author.id + "max"], "Guesses", numbers[message.author.id + "total"]))
+    } else {
+      message.channel.send(embedThreeFields(randomColor(), "Settings", "Minimum", numbers[message.author.id + "min"], "Maximum", numbers[message.author.id + "max"], "Guesses", "Endless"))
+    }
   }
 
   if (message.content[0] === "default") {
