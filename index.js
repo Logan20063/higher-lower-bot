@@ -590,4 +590,4 @@ client.on('message', message => {
   //}, 5000)
 });
 
-client.login("ODA0NzAzMDAxNDMxNTA3MDA0.YBQMEg.fdGo5OB7DLGOpy_JuLQ8tXvgXaQ");
+client.login("token");
