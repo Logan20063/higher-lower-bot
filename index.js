@@ -1,24 +1,10 @@
-let channels = []
-function hour() {
-  for(i = channels.length - 1; i >= 0; i--) {
-    channels[i].send("test completed")
-  }
-}
-
-//send = setInterval(hour, 1000)
-
-
-
-
-
-
 function random(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function randomColor() {
+function randomColor(message) {
   number = random(1, 6)
   if(number == 1) {
     //red
@@ -88,7 +74,7 @@ function checkAdmin(message) {
   if (message.member.hasPermission('ADMINISTRATOR')) {
     return 1
   } else {
-    message.channel.send(embedZeroFields(randomColor(), ":x:You Need To Have Admin:x:"))
+    message.channel.send(embedZeroFields(randomColor(message), ":x:You Need To Have Admin:x:"))
   }
 }
 
@@ -111,7 +97,7 @@ client.on('message', message => {
   if(message.content === "reset") {
     if(checkAdmin(message)) {
       numbers[message.guild.id + "prefix"] = "^"
-      message.channel.send(embedZeroField (randomColor(), "Prefix reset to ^"))
+      message.channel.send(embedZeroFields (randomColor(message), "Prefix reset to ^"))
     }
   }
   if(message.content === "admin") {
@@ -147,51 +133,119 @@ client.on('message', message => {
   }
   message.content = message.content.split(" ")
 
-    //testing command VV
-  if(message.content[0] === "hour") {
-    channels.push(message.channel)
-  }
+    if(message.content[0] === 'pat') {
+      if(message.mentions.users.size == 1) {
+        message.channel.send(message.author.username + " pats " + message.mentions.users.first().username)
+        rando = random(1,4)
+        if(rando == 1) {
+          message.channel.send('https://images-ext-2.discordapp.net/external/53hb0t1Ftok6KiDCAlHhjleRyUijebg34PfmWLsY244/https/cdn.weeb.sh/images/HyWlxJFvb.gif')
+        }
+        if(rando == 2) {
+          message.channel.send('https://images-ext-1.discordapp.net/external/8tlbO-PtNvDizaijNJSJrzY1-lGprkAw_aO95H196dQ/https/cdn.weeb.sh/images/r1Y5L6NCZ.gif?width=475&height=264')
+        }
+        if(rando == 3) {
+          message.channel.send('https://media.tenor.com/videos/2c9d6cda69a0451c4e141e3b9877f595/mp4')
+        }
+        if(rando == 4) {
+          message.channel.send('https://media.tenor.com/videos/d3b9497fde0eb588767dbc23082fd7ea/mp4')
+        }
+      }
+    }
 
-
+    //throw 
+    if(message.content[0] === 'throw') {
+      if(message.mentions.users.size == 1) {
+        message.channel.send(message.author.username + " throws " + message.mentions.users.first().username)
+        rando = random(1,4)
+        if(rando == 1) {
+          message.channel.send('https://media.tenor.co/videos/78b563ff60c67e31e3160f1b5ba8638d/mp4')
+        }
+        if(rando == 2) {
+          message.channel.send('https://media.tenor.co/videos/d40bd176e0e7686bc2e871b25021dc6b/mp4')
+        }
+        if(rando == 3) {
+          message.channel.send('https://media.tenor.co/videos/696f17fb7a3e470434baed68e0c038f1/mp4')
+        }
+        if(rando == 4) {
+          message.channel.send('https://media.discordapp.net/attachments/805873492649312336/835174589986242610/unknown.gif')
+        }
+      }
+    }
 
 
 
     //help
     if (message.content[0] === 'help') {
       embed = new Discord.MessageEmbed()
-        .setColor(randomColor())
+        .setColor(randomColor(message))
         .setTitle("HELP")
         .setURL("https://docs.google.com/document/d/1dWMOoGXSzHVW7o-H8HEa7Lss3WfZ5PDTdRTqbQWjxio/edit")
       
       message.channel.send(embed)
     }
 
+    //links
+    if(message.content[0] === "link" || message.content[0] === "links") {
+     message.channel.send(numbers[message.guild.id + "prefix"] + "vote")
+     message.channel.send(numbers[message.guild.id + "prefix"] + "server")
+     message.channel.send(numbers[message.guild.id + "prefix"] + "invite")
+    }
     //vote
     if(message.content[0] === "vote") {
       embed = new Discord.MessageEmbed()
-        .setColor(randomColor())
-        // .addFields(
-        //   {name: "VOTE", url: "https://top.gg/bot/804703001431507004/vote"},
-        //   {name: "SERVER", url:"https://discord.gg/RkwqWD8N3D"},
-        //   {name: "INVITE", url: "https://discord.com/oauth2/authorize?client_id=804703001431507004&scope=bot&permissions=67632192"}
-        // )
+        .setColor(randomColor(message))
         .setTitle("VOTE")
         .setURL("https://top.gg/bot/804703001431507004/vote")
-        // .setTitle("SERVER")
-        // .setURL("https://discord.gg/RkwqWD8N3D")
-        // .setTitle("INVITE")
-        // .setURL("https://discord.com/oauth2/authorize?client_id=804703001431507004&scope=bot&permissions=67632192")
+      message.channel.send(embed)
+      if(message.guild.id == 804867897243336784) {
+        console.log("ok")
+        embed = new Discord.MessageEmbed()
+         .setColor(randomColor(message))
+         .setTitle("SERVER VOTE")
+         .setURL("https://top.gg/servers/804867897243336784/vote")
+        message.channel.send(embed)
+      }
+    }
+    //server
+    if(message.content[0] === "server") {
+      embed = new Discord.MessageEmbed()
+        .setColor(randomColor(message))
+        .setTitle("SERVER")
+        .setURL("https://discord.gg/RkwqWD8N3D")
+      message.channel.send(embed)
+    }
+    //invite
+    if(message.content[0] === "invite") {
+      embed = new Discord.MessageEmbed()
+        .setColor(randomColor(message))
+        .setTitle("INVITE")
+        .setURL("https://discord.com/oauth2/authorize?client_id=804703001431507004&scope=bot&permissions=67632192")
       message.channel.send(embed)
     }
 
     if(message.content[0] === "servers") {
-      message.channel.send(embedZeroFields(randomColor(), "Higher Lower Is In " + client.guilds.cache.size + " Servers"))
+      message.channel.send(embedZeroFields(randomColor(message), "Higher Lower Is In " + client.guilds.cache.size + " Servers"))
     }
 
     if (isNaN(numbers[message.author.id + "endless"])) {
       numbers[message.author.id + "endless"] = 0
     }
     
+    //mode
+    if(message.content[0] === 'mode') {
+      if(message.content[1] === 'number' || message.content[1] === 'numbers') {
+        numbers[message.author.id + "mode"] = number
+      }
+      if(message.content[1] === 'word' || message.content[1] === 'word') {
+        numbers[message.author.id + "mode"] = word
+      }
+      if(message.content[2] === 'endless') {
+        numbers[message.author.id + "endless"] = 1
+      } else {
+        numbers[message.author.id + "endless"] = 0
+      }
+    }
+
     //start
     if (message.content[0] === 'start') {
       if (isNaN(numbers[message.author.id + "min"])) {
@@ -203,14 +257,20 @@ client.on('message', message => {
       if (isNaN(numbers[message.author.id + "total"])) {
       numbers[message.author.id + "total"] = numbers[message.guild.id + "total"]
       }
+      if(isNaN(numbers[message.author.id + 'deduction'])){
+        numbers[message.author.id + "deduction"] = 0
+      }
+      numbers[message.author.id + "currentMin"] = numbers[message.author.id + "min"]
+      numbers[message.author.id + "currentMax"] = numbers[message.author.id + "max"]
       if(numbers[message.author.id + "min"] == Infinity || numbers[message.author.id + "max"] == Infinity || numbers[message.author.id + "min"] == -Infinity || numbers[message.author.id + "max"] == -Infinity) {
         numbers[message.author.id + "min"] = 1
         numbers[message.author.id + "max"] = 10
       }
+      numbers[message.author.id + "deduction"] = 0
 
       picked = random(numbers[message.author.id + "min"], numbers[message.author.id + "max"])
 
-    message.channel.send(embedTwoFields(randomColor(), "Picked", "parameters", numbers[message.author.id + "min"] + "-" + numbers[message.author.id + "max"], "guesses", numbers[message.author.id + "total"]));
+    message.channel.send(embedTwoFields(randomColor(message), "Picked", "parameters", numbers[message.author.id + "min"] + "-" + numbers[message.author.id + "max"], "guesses", numbers[message.author.id + "total"]));
 
     numbers[message.author.id] = picked
     numbers[message.author.id + "guesses"] = numbers[message.author.id + "total"]
@@ -228,10 +288,13 @@ client.on('message', message => {
         message.channel.send("<@" + message.mentions.members.first().user.id + "> has been challanged to a duel, do you accept")
       }
     }
-
+    
     //higher/lower
     if (message.content[0] < numbers[message.author.id] && numbers[message.author.id + "guesses"] > 0 || message.content[0] < numbers[message.author.id] && numbers[message.author.id + "endless"] == 1) {
-    message.channel.send(embedZeroFields(randomColor(), ':arrow_up:higher:arrow_up:'));
+    if(message.content[0] > numbers[message.author.id + "currentMin"]) {
+      numbers[message.author.id + "currentMin"] = message.content[0]
+    }
+    message.channel.send(embedZeroFields(randomColor(message), ':arrow_up:higher:arrow_up:'));
     numbers[message.author.id + "guesses"] -= 1
     if (numbers[message.author.id + "guesses"] == 0) {
         message.reply('game over')
@@ -240,7 +303,10 @@ client.on('message', message => {
       }
     }
     if (message.content[0] > numbers[message.author.id] && numbers[message.author.id + "guesses"] > 0 || message.content[0] > numbers[message.author.id] && numbers[message.author.id + "endless"] == 1) {
-      message.channel.send(embedZeroFields(randomColor(), ':arrow_down:lower:arrow_down:'))
+      if(message.content[0] < numbers[message.author.id + "currentMax"]) {
+      numbers[message.author.id + "currentMax"] = message.content[0]
+    }
+      message.channel.send(embedZeroFields(randomColor(message), ':arrow_down:lower:arrow_down:'))
       numbers[message.author.id + "guesses"] -= 1
       if (numbers[message.author.id + "guesses"] == 0) {
         message.reply('game over')
@@ -257,15 +323,32 @@ client.on('message', message => {
     
       score = (numbers[message.author.id + "originalMax"] - numbers[message.author.id + "originalMin"] + 2) - Math.pow(2, numbers[message.author.id + "originalTotal"])
 
+      while(numbers[message.author.id + "deduction"] > 0) {
+        score = score / 2
+        numbers[message.author.id + "deduction"] -= 1
+      }
+      score = Math.floor(score)
+
       if(score < 1){
         score = 1    
       }
       if(numbers[message.author.id + "originalEndless"] == 0){
         leaderboard[message.guild.id + message.author.id] += score
-      message.channel.send(embedOneField(randomColor(), ':white_check_mark:Congradulations you won:white_check_mark:', 'score', score)) 
+      message.channel.send(embedOneField(randomColor(message), ':white_check_mark:Congradulations you won:white_check_mark:', 'score', score)) 
       } else {
-        message.channel.send(embedOneField(randomColor(), "You Got It", "Score", "Nothing Since You Were In Endless Mode"))
+        message.channel.send(embedOneField(randomColor(message), "You Got It", "Score", "Nothing Since You Were In Endless Mode"))
       }
+    }
+    //hint
+    if(message.content[0] === "hint") {
+      message.channel.send(embedOneField(randomColor(message), "Hint", "current minmax", numbers[message.author.id + "currentMin"] + "-" + numbers[message.author.id + "currentMax"]))
+    }
+
+    //best
+    if(message.content[0] === 'best') {
+      best = numbers[message.author.id + "currentMin"]/2+numbers[message.author.id + "currentMax"]/2
+      message.channel.send(embedOneField(randomColor(), "Hint", "Best Number", best))
+      numbers[message.author.id + "deduction"] += 1
     }
 
     //endless
@@ -275,17 +358,17 @@ client.on('message', message => {
       }
       if(numbers[message.author.id + "endless"] == 0) {
         numbers[message.author.id + "endless"] = 1
-        message.channel.send(embedOneField(randomColor(), "endless mode", "new setting", "endless mode on"))
+        message.channel.send(embedOneField(randomColor(message), "endless mode", "new setting", "endless mode on"))
       } else if(numbers[message.author.id + "endless"] == 1) {
         numbers[message.author.id + "endless"] = 0
-        message.channel.send(embedOneField(randomColor(), "endless mode", "new setting", "endless mode off"))
+        message.channel.send(embedOneField(randomColor(message), "endless mode", "new setting", "endless mode off"))
       }
     }
 
     //cheat
     if(message.content[0] === "cheat") {
       if(numbers[message.author.id + "endless"] == 1 && numbers[message.author.id + "originalEndless"] == 1) {
-        message.channel.send(embedOneField(randomColor(), "Cheat Mode Enabled", "Number", numbers[message.author.id]))
+        message.channel.send(embedOneField(randomColor(message), "Cheat Mode Enabled", "Number", numbers[message.author.id]))
       } else {
         message.reply("You must be in endless mode to cheat")
       }
@@ -304,7 +387,43 @@ client.on('message', message => {
           return
         }
         numbers[message.guild.id + "prefix"] = message.content[1]
-        message.channel.send(embedTwoFields(randomColor(), "Prefix Changed", "Old Prefix", oldPrefix, "New Prefix", numbers[message.guild.id + "prefix"]))
+        message.channel.send(embedTwoFields(randomColor(message), "Prefix Changed", "Old Prefix", oldPrefix, "New Prefix", numbers[message.guild.id + "prefix"]))
+      }
+    }
+
+    //preset
+    if(message.content[0] === "preset" || message.content[0] === "presets") {
+      message.content[0] = parseInt(message.content[1])
+      if(isNaN(message.content[1])) {
+        message.channel.send(embedThreeFields(randomColor(), "Presets", "1.Classic", "1-10, 4", "2.Century", "1-100, 7", "3.Meme", "69-420, 9"))
+        return
+      }
+      if(isNaN(numbers[message.author.id + "min"])){
+        numbers[message.author.id + "min"] = 1
+      }
+      if(isNaN(numbers[message.author.id + "max"])){
+        numbers[message.author.id + "max"] = 1
+      }
+      if(isNaN(numbers[message.author.id + "total"])){
+        numbers[message.author.id + "total"] = 1
+      }
+      if(message.content[1] == 1) {
+        numbers[message.author.id + "min"] = 1
+        numbers[message.author.id + "max"] = 10
+        numbers[message.author.id + "total"] = 4
+        message.channel.send(embedTwoFields(randomColor(), "Preset Changed", "Range", "1-10", "Guesses", "4"))
+      }
+      if(message.content[1] == 2) {
+        numbers[message.author.id + "min"] = 1
+        numbers[message.author.id + "max"] = 100
+        numbers[message.author.id + "total"] = 7
+        message.channel.send(embedTwoFields(randomColor(), "Preset Changed", "Range", "1-100", "Guesses", "7"))
+      }
+      if(message.content[1] == 3) {
+        numbers[message.author.id + "min"] = 69
+        numbers[message.author.id + "max"] = 420
+        numbers[message.author.id + "total"] = 9
+        message.channel.send(embedTwoFields(randomColor(), "Preset Changed", "Range", "69-420", "Guesses", "9"))
       }
     }
 
@@ -319,7 +438,7 @@ client.on('message', message => {
       }
       numbers[message.author.id + "min"] = message.content[1]
       numbers[message.author.id + "max"] = message.content[2]
-      message.channel.send(embedTwoFields(randomColor(), "MinMax changed", "New Minimum", numbers[message.author.id + "min"], "New Maximum", numbers[message.author.id + "max"]))
+      message.channel.send(embedTwoFields(randomColor(message), "MinMax changed", "New Minimum", numbers[message.author.id + "min"], "New Maximum", numbers[message.author.id + "max"]))
     }
 
     //guesses amount
@@ -330,15 +449,15 @@ client.on('message', message => {
         return
       }
       numbers[message.author.id + "total"] = message.content[1]
-      message.channel.send(embedOneField(randomColor(), "Guesses Changed", "New Guesses", numbers[message.author.id + "total"]))
+      message.channel.send(embedOneField(randomColor(message), "Guesses Changed", "New Guesses", numbers[message.author.id + "total"]))
     }
 
     //guesses left
     if(message.content[0] === "guessesleft") {
       if(numbers[message.author.id + "endless"] == 0){
-        message.channel.send(embedOneField(randomColor(), "Guesses Left", "Amount", numbers[message.author.id + "guesses"]))
+        message.channel.send(embedOneField(randomColor(message), "Guesses Left", "Amount", numbers[message.author.id + "guesses"]))
       } else {
-        message.channel.send(embedOneField(randomColor(), "Guesses Left", "Amount", "endless"))
+        message.channel.send(embedOneField(randomColor(message), "Guesses Left", "Amount", "endless"))
       }
     } 
 
@@ -349,7 +468,7 @@ client.on('message', message => {
     }
       if(message.content[1] === "reset") {
         leaderboard[message.guild.id + message.author.id] = 0
-        message.channel.send(embedZeroFields(randomColor(), "Score Reset To 0"))
+        message.channel.send(embedZeroFields(randomColor(message), "Score Reset To 0"))
       
       } else if(message.content[1] === "add"){
         message.content[2] = parseInt(message.content[2])
@@ -363,12 +482,12 @@ client.on('message', message => {
               leaderboard[message.guild.id + message.mentions.members.first().id] = 0
             }
             leaderboard[message.guild.id + message.mentions.members.first().id] += message.content[2]
-            message.channel.send(embedZeroFields(randomColor(), message.content[2] + " Added To Score"))
+            message.channel.send(embedZeroFields(randomColor(message), message.content[2] + " Added To Score"))
             return
           } else {
             if(message.content[2] >= 0) {
               leaderboard[message.guild.id + message.author.id] += message.content[2]
-              message.channel.send(embedZeroFields(randomColor(), message.content[2] + " Added To Score"))
+              message.channel.send(embedZeroFields(randomColor(message), message.content[2] + " Added To Score"))
             } else {
               message.reply("you need to add something, not subtract")
             }
@@ -387,7 +506,7 @@ client.on('message', message => {
         }
         if(message.content[2] >= 0) {
           leaderboard[message.guild.id + message.author.id] -= message.content[2]
-          message.channel.send(embedZeroFields(randomColor(), message.content[2] + " Subtracted From Score"))
+          message.channel.send(embedZeroFields(randomColor(message), message.content[2] + " Subtracted From Score"))
         } else {
           message.reply("you need to subtract something, don't cheese it")
         }
@@ -401,7 +520,7 @@ client.on('message', message => {
         if(checkAdmin(message)){  
           if(message.content[2] >= 0){  
             leaderboard[message.guild.id + message.author.id] = message.content[2]
-            message.channel.send(embedZeroFields(randomColor(), "Score Set To " + message.content[2]))
+            message.channel.send(embedZeroFields(randomColor(message), "Score Set To " + message.content[2]))
           } else {
             message.reply("you can't go to the negatives")
           }
@@ -410,16 +529,16 @@ client.on('message', message => {
         if(isNaN(leaderboard[message.guild.id + message.mentions.members.first().id])){
           leaderboard[message.guild.id + message.mentions.members.first().id] = 0
         }
-        message.channel.send(embedOneField(randomColor(), "Score", message.mentions.members.first().user.username + "#" + message.mentions.members.first().user.discriminator, leaderboard[message.guild.id + message.mentions.members.first().id]))
+        message.channel.send(embedOneField(randomColor(message), "Score", message.mentions.members.first().user.username + "#" + message.mentions.members.first().user.discriminator, leaderboard[message.guild.id + message.mentions.members.first().id]))
       } else {
-        message.channel.send(embedOneField(randomColor(), "Score", message.author.username + "#" + message.author.discriminator, leaderboard[message.guild.id + message.author.id]))
+        message.channel.send(embedOneField(randomColor(message), "Score", message.author.username + "#" + message.author.discriminator, leaderboard[message.guild.id + message.author.id]))
       }
     }
 
     //resetscore
     if(message.content[0] === "resetscore") {
       leaderboard[message.guild.id + message.author.id] = 0
-      message.channel.send(embedZeroFields(randomColor(), "Guesses Reset To 0"))
+      message.channel.send(embedZeroFields(randomColor(message), "Guesses Reset To 0"))
     }
 
     //settings
@@ -434,9 +553,9 @@ client.on('message', message => {
       numbers[message.author.id + "total"] = numbers[message.guild.id + "total"]
       }
       if(numbers[message.author.id + "endless"] == 0){
-        message.channel.send(embedThreeFields(randomColor(), "Settings", "Minimum", numbers[message.author.id + "min"], "Maximum", numbers[message.author.id + "max"], "Guesses", numbers[message.author.id + "total"]))
+        message.channel.send(embedThreeFields(randomColor(message), "Settings", "Minimum", numbers[message.author.id + "min"], "Maximum", numbers[message.author.id + "max"], "Guesses", numbers[message.author.id + "total"]))
       } else {
-        message.channel.send(embedThreeFields(randomColor(), "Settings", "Minimum", numbers[message.author.id + "min"], "Maximum", numbers[message.author.id + "max"], "Guesses", "Endless"))
+        message.channel.send(embedThreeFields(randomColor(message), "Settings", "Minimum", numbers[message.author.id + "min"], "Maximum", numbers[message.author.id + "max"], "Guesses", "Endless"))
       }
     }
 
@@ -446,14 +565,14 @@ client.on('message', message => {
       message.content[3] = parseInt(message.content[3])
 
       if (isNaN(message.content[1]) || isNaN(message.content[2]) || isNaN(message.content[3])) {
-        message.channel.send(embedThreeFields(randomColor(),"Default Settings", "Minimum", numbers[message.guild.id + "min"], "Maximum", numbers[message.guild.id + "max"], "Guesses", numbers[message.guild.id + "total"]))
+        message.channel.send(embedThreeFields(randomColor(message),"Default Settings", "Minimum", numbers[message.guild.id + "min"], "Maximum", numbers[message.guild.id + "max"], "Guesses", numbers[message.guild.id + "total"]))
         return
       }
     if(checkAdmin(message)){
         numbers[message.guild.id + "min"] = message.content[1] 
         numbers[message.guild.id + "max"] = message.content[2]
         numbers[message.guild.id + "total"] = message.content[3]
-        message.channel.send(embedThreeFields(randomColor(),":white_check_mark:default settings have been changed:white_check_mark:", "Minimum", numbers[message.guild.id + "min"], "Maximum", numbers[message.guild.id + "max"], "Guesses", numbers[message.guild.id + "total"]))
+        message.channel.send(embedThreeFields(randomColor(message),":white_check_mark:default settings have been changed:white_check_mark:", "Minimum", numbers[message.guild.id + "min"], "Maximum", numbers[message.guild.id + "max"], "Guesses", numbers[message.guild.id + "total"]))
       }
   }
 
@@ -468,6 +587,7 @@ client.on('message', message => {
   if(message.content[0] === "privacy") {
     message.channel.send("the only personal data higher lower stores is your discord id, username, and discriminator")
   }
+  //}, 5000)
 });
 
-client.login("TOKEN");
+client.login("ODA0NzAzMDAxNDMxNTA3MDA0.YBQMEg.fdGo5OB7DLGOpy_JuLQ8tXvgXaQ");
